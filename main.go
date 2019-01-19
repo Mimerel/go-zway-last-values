@@ -58,16 +58,22 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 	var js []byte
 	if strings.ToLower(urlParams[1]) != "all" {
 		result, err := requestMetric(data, urlParams[1])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			w.WriteHeader(500)
+
+		}
 		js, err = json.Marshal(result)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			w.WriteHeader(500)
 		}
 	} else {
 		js, err = json.Marshal(data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			w.WriteHeader(500)
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
