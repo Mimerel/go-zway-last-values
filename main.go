@@ -60,21 +60,18 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 		result, err := requestMetric(data, urlParams[1])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			w.WriteHeader(500)
 			return
 
 		}
 		js, err = json.Marshal(result)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			w.WriteHeader(500)
 			return
 		}
 	} else {
 		js, err = json.Marshal(data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			w.WriteHeader(500)
 			return
 		}
 	}
