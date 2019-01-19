@@ -12,11 +12,6 @@ type Elasticsearch struct {
 	Url string `yaml:"url,omitempty"`
 }
 
-type Result struct {
-	Name string
-	Value float64
-}
-
 type StructuredData struct {
 	Metric string
 	Labels map[string]string

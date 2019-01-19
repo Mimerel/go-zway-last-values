@@ -32,7 +32,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		urlPath := r.URL.Path
 		urlParams := strings.Split(urlPath, "/")
-		if len(urlParams) > 1 {
+		if len(urlParams) == 2 {
 			collectMetricValuesAndSend(w, r, urlParams, &config)
 		} else {
 			w.WriteHeader(500)
@@ -42,7 +42,6 @@ func main() {
 }
 
 func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParams []string, config *_package.Configuration) {
-	var results []_package.Result
 	yamlFile, err := ioutil.ReadFile(config.Local)
 	if err != nil {
 		logs.Error(config.Elasticsearch.Url, config.Host, fmt.Sprintf("Unable to read file from local storeg %s ", err))
@@ -57,18 +56,9 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 
 	}
 	var js []byte
-	if urlParams[1] != "all" {
-		for key, value := range urlParams {
-			if key != 0 {
-				result, err := requestMetric(data, value)
-				if err != nil {
-					logs.Error(config.Elasticsearch.Url, config.Host, fmt.Sprintf("Unable to find value for metric %s %s", value, err))
-				} else {
-					results = append(results, result)
-				}
-			}
-		}
-		js, err = json.Marshal(results)
+	if strings.ToLower(urlParams[1]) != "all" {
+		result, err := requestMetric(data, urlParams[1])
+		js, err = json.Marshal(result)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -84,15 +74,15 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 	w.Write(js)
 }
 
-func requestMetric(data []_package.StructuredData, metricName string) (_package.Result, error) {
+func requestMetric(data []_package.StructuredData, metricName string) (float64, error) {
 	for _, value := range data {
 		if value.Metric == metricName {
 			metricValue, err := strconv.ParseFloat(value.Value, 64)
 			if err != nil {
-				return _package.Result{}, fmt.Errorf("Unable to convert metric value to float")
+				return metricValue, fmt.Errorf("Unable to convert metric value to float")
 			}
-			return _package.Result{metricName, metricValue}, nil
+			return metricValue, nil
 		}
 	}
-	return _package.Result{}, fmt.Errorf("Unable to find metric in storage_file")
+	return -9999, fmt.Errorf("Unable to find metric in storage_file")
 }
