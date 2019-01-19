@@ -53,7 +53,8 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 	err = yaml.Unmarshal(yamlFile, &data)
 	if err != nil {
 		logs.Error(config.Elasticsearch.Url, config.Host, fmt.Sprintf("Unable to yaml to structure %s ", err))
-
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	var js []byte
 	if strings.ToLower(urlParams[1]) != "all" {
