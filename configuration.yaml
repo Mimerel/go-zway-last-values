@@ -1,4 +1,3 @@
-token: 53e54ca5bfbf325a57d24562f86d7c352ca202b8
 elasticSearch:
     url: http://192.168.222.240:9200
 host: go-last-values
