@@ -1,4 +1,4 @@
-package main
+package _package
 
 type Configuration struct {
 	Token string `yaml:"token,omitempty"`

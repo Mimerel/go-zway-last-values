@@ -1,4 +1,4 @@
-package main
+package _package
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ func ReadConfiguration() (Configuration) {
 	if _, err := os.Stat("./configuration.yaml"); !os.IsNotExist(err) {
 		pathToFile = "./configuration.yaml"
 	} else if pathToFile == "" {
-		pathToFile = "/home/pi/go/src/go-prowl/configuration.yaml"
+		pathToFile = "/home/pi/go/src/go-zway-last-values/configuration.yaml"
 	}
 	yamlFile, err := ioutil.ReadFile(pathToFile)
 
@@ -23,7 +23,7 @@ func ReadConfiguration() (Configuration) {
 		panic(err)
 	}
 
-	var config configuration
+	var config Configuration
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
