@@ -1,5 +1,5 @@
 elasticSearch:
     url: http://192.168.222.240:9200
 host: go-last-values
-port: 9990
+port: 9993
 local: /home/pi/go/src/go-prometheus-to-elastic/local_storage.yaml
