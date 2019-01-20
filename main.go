@@ -38,7 +38,10 @@ func main() {
 			w.WriteHeader(500)
 		}
 	})
-	http.ListenAndServe(":"+Port, nil)
+	err := http.ListenAndServe(":"+Port, nil)
+	if err != nil {
+		fmt.Errorf("error starting server %+v", err)
+	}
 }
 
 func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParams []string, config *_package.Configuration) {

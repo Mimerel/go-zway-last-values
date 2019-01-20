@@ -11,11 +11,11 @@ import (
 Reads configuration file
  */
 func ReadConfiguration() (Configuration) {
-	pathToFile := os.Getenv("LOGGER_CONFIGURATION_FILE")
+	pathToFile := os.Getenv("HEATING_CONFIGURATION_FILE")
 	if _, err := os.Stat("./configuration.yaml"); !os.IsNotExist(err) {
 		pathToFile = "./configuration.yaml"
 	} else if pathToFile == "" {
-		pathToFile = "/home/pi/go/src/go-zway-last-values/configuration.yaml"
+		pathToFile = "/home/pi/go/src/go-zway-heating-management/configuration.yaml"
 	}
 	yamlFile, err := ioutil.ReadFile(pathToFile)
 
