@@ -92,5 +92,5 @@ func requestMetric(data []_package.StructuredData, metricName string) (float64, 
 			return metricValue, nil
 		}
 	}
-	return -9999, fmt.Errorf("Unable to find metric in storage_file")
+	return -9999, fmt.Errorf("Unable to find metric %s in storage_file", metricName)
 }
