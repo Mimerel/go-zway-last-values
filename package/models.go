@@ -1,7 +1,6 @@
 package _package
 
 type Configuration struct {
-	Token string `yaml:"token,omitempty"`
 	Elasticsearch Elasticsearch `yaml:"elasticSearch,omitempty"`
 	Host string `yaml:"host,omitempty"`
 	Port string `yaml:"port,omitempty"`

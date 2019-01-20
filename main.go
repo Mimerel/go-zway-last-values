@@ -28,7 +28,6 @@ func main() {
 	logging.SetBackend(backendLeveled, backendFormatter)
 
 	config := _package.ReadConfiguration()
-	Port := config.Port
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		urlPath := r.URL.Path
 		urlParams := strings.Split(urlPath, "/")
@@ -38,7 +37,7 @@ func main() {
 			w.WriteHeader(500)
 		}
 	})
-	err := http.ListenAndServe(":"+Port, nil)
+	err := http.ListenAndServe(":" + config.Port, nil)
 	if err != nil {
 		fmt.Errorf("error starting server %+v", err)
 	}

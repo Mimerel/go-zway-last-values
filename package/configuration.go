@@ -20,6 +20,7 @@ func ReadConfiguration() (Configuration) {
 	yamlFile, err := ioutil.ReadFile(pathToFile)
 
 	if err != nil {
+		fmt.Printf("Unable to read conf file : %+v \n", err)
 		panic(err)
 	}
 
@@ -27,6 +28,7 @@ func ReadConfiguration() (Configuration) {
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
+		fmt.Printf("Unable to convert file to yaml : %+v \n", err)
 		panic(err)
 	} else {
 		fmt.Printf("Configuration Loaded : %+v \n", config)
