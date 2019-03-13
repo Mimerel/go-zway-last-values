@@ -3,29 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Mimerel/go-logger-client"
-	"github.com/op/go-logging"
 	"go-zway-last-values/package"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 )
 
-var log = logging.MustGetLogger("default")
-
-var format = logging.MustStringFormatter(
-	`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{color:reset} %{message}`,
-)
-
 func main() {
-	backend := logging.NewLogBackend(os.Stderr, "", 0)
-	backendFormatter := logging.NewBackendFormatter(backend, format)
-	backendLeveled := logging.AddModuleLevel(backend)
-	backendLeveled.SetLevel(logging.NOTICE, "")
-	logging.SetBackend(backendLeveled, backendFormatter)
+
 
 	config := _package.ReadConfiguration()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -39,14 +26,14 @@ func main() {
 	})
 	err := http.ListenAndServe(":" + config.Port, nil)
 	if err != nil {
-		fmt.Errorf("error starting server %+v", err)
+		config.Logger.Error("error starting server %+v", err)
 	}
 }
 
 func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParams []string, config *_package.Configuration) {
 	yamlFile, err := ioutil.ReadFile(config.Local)
 	if err != nil {
-		logs.Error(config.Elasticsearch.Url, config.Host, fmt.Sprintf("Unable to read file from local storeg %s ", err))
+		config.Logger.Error("Unable to read file from local storage %s ", err)
 		w.WriteHeader(500)
 	}
 
@@ -54,7 +41,7 @@ func collectMetricValuesAndSend(w http.ResponseWriter, r *http.Request, urlParam
 
 	err = yaml.Unmarshal(yamlFile, &data)
 	if err != nil {
-		logs.Error(config.Elasticsearch.Url, config.Host, fmt.Sprintf("Unable to yaml to structure %s ", err))
+		config.Logger.Error("Unable to convert yaml to structure %s ", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

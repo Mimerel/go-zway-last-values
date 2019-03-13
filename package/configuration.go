@@ -2,6 +2,7 @@ package _package
 
 import (
 	"fmt"
+	"github.com/Mimerel/go-logger-client"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -31,7 +32,8 @@ func ReadConfiguration() (Configuration) {
 		fmt.Printf("Unable to convert file to yaml : %+v \n", err)
 		panic(err)
 	} else {
-		fmt.Printf("Configuration Loaded : %+v \n", config)
+		config.Logger = logs.New(config.Elasticsearch.Url, config.Host)
+		config.Logger.Info("Configuration Loaded : %+v \n", config)
 	}
 	return config
 }

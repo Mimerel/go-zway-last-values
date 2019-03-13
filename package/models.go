@@ -1,10 +1,13 @@
 package _package
 
+import "github.com/Mimerel/go-logger-client"
+
 type Configuration struct {
 	Elasticsearch Elasticsearch `yaml:"elasticSearch,omitempty"`
 	Host string `yaml:"host,omitempty"`
 	Port string `yaml:"port,omitempty"`
 	Local string `yaml:"local,omitempty"`
+	Logger logs.LogParams
 }
 
 type Elasticsearch struct {
